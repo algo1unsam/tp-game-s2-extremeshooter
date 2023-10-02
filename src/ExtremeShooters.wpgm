@@ -1,0 +1,9 @@
+import wollok.game.*
+import config.*
+
+program juego {
+	parametros.iniciar()
+	visuales.iniciar()
+	teclado.iniciar()
+	game.start()
+}
