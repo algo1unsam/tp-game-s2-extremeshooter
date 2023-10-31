@@ -1,10 +1,21 @@
 import wollok.game.*
+import extras.*
+
 class Disparo
 {
 	var property position
 	const property etiquetaTickMovement = "mover"+self.toString()  
+	const imagen
+	method image() = imagen
 	method danio() = 10
-	method image() = "shoot.png"
+	method haceDanio(jugador)
+	{
+		jugador.recibeDanio(self.danio())
+	}
+	method interaccionCon(jugador)
+	{
+		self.haceDanio(jugador)
+	}
 	method sonido(sonidoDeFondo)
 	{
 		game.sound(sonidoDeFondo).shouldLoop(false)
@@ -43,11 +54,7 @@ class Disparo
 	
 	method evaluarComportamiento(_chara)
 	{
-//		_chara.direccion().comportamineto()
-		if(_chara.direccion() == "der")
-			{self.comportamientoDerecha()}
-		else
-			{self.comportamientoIzquierda()}
+		_chara.direccion().comportamientoDireccional(self)
 	}
 	method comportamientoIzquierda()
 	{
@@ -102,8 +109,7 @@ class DisparoDiagonal inherits DisparoVertical
 	}
 	override method evaluarComportamiento(_chara)
 	{
-		if(_chara.direccion() == "der")	{self.comportamientoDerecha()}
-		else							{self.comportamientoIzquierda()}
+		_chara.direccion().comportamientoDireccional(self)
 	}
 }
 
@@ -124,10 +130,12 @@ class DisparoDiagonalInferior inherits DisparoDiagonal
 //Armamentos
 class Armamento
 {
+	method image(_chara) = 	"_spell_"+_chara.direccion().nombre()+".png"
 	method dispararProyectil(_chara,proyectil)
 	{
 		proyectil.colocarProyectil(_chara)
 		proyectil.automaticSelfDestruction()
+		game.schedule(100,{=>_chara.estado(reposo)})
 	}
 }
 
@@ -135,39 +143,41 @@ object armamentoZipmata inherits Armamento
 {
 	method dispararProyectil1(_chara)
 	{
-		const proyectil = new DisparoDiagonal(position = _chara.position())
+		const proyectil = new DisparoDiagonal(position = _chara.position(),imagen=self.image(_chara))
 		self.dispararProyectil(_chara,proyectil)
 	}
 	method dispararProyectil2(_chara)
 	{
-		const proyectil = new DisparoDiagonalInferior(position = _chara.position())
+		const proyectil = new DisparoDiagonalInferior(position = _chara.position(),imagen=self.image(_chara))
 		self.dispararProyectil(_chara,proyectil)
 	}
 }
 
 object armamentoYui inherits Armamento
 {
+	override method image(_chara) = "elr" + super(_chara)
 	method dispararProyectil1(_chara)
 	{
-		const proyectil = new Disparo(position = _chara.position())
+		const proyectil = new Disparo(position = _chara.position(),imagen=self.image(_chara))
 		self.dispararProyectil(_chara,proyectil)
 	}
 	method dispararProyectil2(_chara)
 	{
-		const proyectil = new DisparoVertical(position = _chara.position())
+		const proyectil = new DisparoVertical(position = _chara.position(),imagen=self.image(_chara))
 		self.dispararProyectil(_chara,proyectil)
 	}
 }
-object armamentoThirdGuy inherits Armamento
+object armamentoEagleMan inherits Armamento
 {
+	override method image(_chara) = "eag" + super(_chara)
 	method dispararProyectil1(_chara)
 	{
-		const proyectil = new Disparo(position = _chara.position())
+		const proyectil = new Disparo(position = _chara.position(),imagen=self.image(_chara))
 		self.dispararProyectil(_chara,proyectil)
 	}
 	method dispararProyectil2(_chara)
 	{
-		const proyectil = new DisparoDiagonal(position = _chara.position())
+		const proyectil = new DisparoDiagonal(position = _chara.position(),imagen=self.image(_chara))
 		self.dispararProyectil(_chara,proyectil)
 	}
 }

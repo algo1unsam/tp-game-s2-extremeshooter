@@ -2,14 +2,42 @@ import wollok.game.*
 import proyectiles.*
 import plataformas.*
 import niveles.*
+import extras.*
 
 //JUGADORES
-object jugador1
+class Jugador
 {
 	var property personaje
-	var property vida = 100
-	var property posicionInicial = game.at(0,1)
+	var property vidas = 100
+	var property energia = 100
+	method direccionInicial()
+	method posicionInicial()
 	method controles()
+	
+	method asignarPersonaje() {
+		personaje.jugador(self)
+		personaje.position(self.posicionInicial())
+		personaje.direccion(self.direccionInicial())
+	}
+	method recibeDanio(danioDisparo)
+	{
+		vidas -= danioDisparo
+	}
+	method gastarEnergia(gasto)
+	{
+		energia -= gasto
+	}
+	method sinEnergia() = energia <= 0
+	method recargaEnergia(pocion) 
+	{
+		energia += pocion
+	}
+}
+
+object jugador1 inherits Jugador(personaje = null){
+	override method posicionInicial() = game.at(0,1)
+	override method direccionInicial() = derecha
+	override method controles()
 	{
 		keyboard.a().onPressDo({personaje.retroceder()})
 		keyboard.d().onPressDo({personaje.avanzar()})
@@ -19,25 +47,15 @@ object jugador1
 		game.onTick(500,"caida",{=> personaje.caer()})
 	}
 	
-	method asignarPersonaje() {
+	override method asignarPersonaje() {
 		personaje = seleccionPersonajes.quienJugador1()
-		personaje.jugador(self)
-		personaje.position(posicionInicial)
-		personaje.direccion("der")
-	}
-	
-	method recibeDanio(danioDisparo)
-	{
-		vida -= danioDisparo
-	}
+		super()}
 }
 
-object jugador2
-{
-	const posicionInicial = game.at(game.width()-1,0)
-	var property personaje
-	var property vida = 100
-	method controles()
+object jugador2 inherits Jugador(personaje = null){
+	override method posicionInicial() = game.at(game.width()-1,0)
+	override method direccionInicial() = izquierda
+	override method controles()
 	{
 		keyboard.left().onPressDo({personaje.retroceder()})
 		keyboard.right().onPressDo({personaje.avanzar()})
@@ -47,50 +65,47 @@ object jugador2
 		keyboard.x().onPressDo({personaje.disparo2()})
 	}
 	
-	method asignarPersonaje() {
+	override method asignarPersonaje() {
 		personaje = seleccionPersonajes.quienJugador2()
-		personaje.jugador(self)
-		personaje.direccion("izq")
-		personaje.position(posicionInicial)
-	}
-	method recibeDanio(danioDisparo)
-	{
-		vida -= danioDisparo
+		super()
 	}
 }
-
-
-
-
-
-
-
-
-
 
 //personajes jugables
 class Personaje
 {
-	var property direccion = "der" //La orientacion a donde el personaje esta apuntando. Puede ser izquierda (izq) o derecha (der)
+	var property direccion = derecha //La orientacion a donde el personaje esta apuntando. Puede ser izquierda (izq) o derecha (der)
+	var property estado = reposo
 	var property position = game.origin()
 	const property armamento
 	var property jugador
+	
+	method image()= direccion.nombre() + estado.nombre() + ".png"
+	
 	method avanzar()
 	{
 		position = self.position().right(1)
-		direccion = "der"
+		direccion = derecha
 	}
-	method subir(algo){}
 	method retroceder()
 	{
 		position = self.position().left(1)
-		direccion = "izq"
-	}	
+		direccion = izquierda
+	}
+	
+	method interaccionCon(otroJugador)
+	{
+		otroJugador.personaje().avanzar()
+		self.retroceder()
+	}
+	
 	//Metodos para volar y caer	
 	method enElSuelo()= self.position().y()==1
 	method volar()
 	{
-		position = self.position().up(2)
+		if(not(jugador.sinEnergia())){
+		jugador.gastarEnergia(1)
+		position = self.position().up(2)}
 	}
 	method caer() //Cuando dejé de volar
 	{
@@ -102,11 +117,17 @@ class Personaje
 	
 	method disparo1()
 	{
-		armamento.dispararProyectil1(self)
+		if(not(jugador.sinEnergia())){
+		estado = ataque
+		jugador.gastarEnergia(5)
+		armamento.dispararProyectil1(self)}
 	}
 	method disparo2()
 	{
-		armamento.dispararProyectil2(self)
+		if(not(jugador.sinEnergia())){
+		estado = ataque
+		jugador.gastarEnergia(5)
+		armamento.dispararProyectil2(self)}
 	}
 	
 }
@@ -114,16 +135,16 @@ class Personaje
 
 class PoolYui inherits Personaje(armamento = armamentoYui)
 {
-	method image() = "yui_" + direccion + ".png"
+	override method image() = "elr_" + super()
 
 }
 
 class Zipmata inherits Personaje(armamento = armamentoZipmata)
 {
-	method image() = "char_" + direccion + ".png"
+	override method image() = "char_" + super()
 }
 
-class TankFlan inherits Personaje(armamento = armamentoThirdGuy)
+class EagleMan inherits Personaje(armamento = armamentoEagleMan)
 {
-	method image() = "flan_" + direccion + ".png"
+	override method image() = "eag_" + super()
 }

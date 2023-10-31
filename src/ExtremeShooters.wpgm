@@ -1,9 +1,13 @@
 import wollok.game.*
-import config.*
+import plataformas.*
+import personajes.*
+import niveles.*
 
-program juego {
-	parametros.iniciar()
-	visuales.iniciar()
-	teclado.iniciar()
+program juego
+{
+	game.title("Extreme Shooters")
+	game.height(10)
+	game.width(20)
+	portada.iniciar()
 	game.start()
 }
