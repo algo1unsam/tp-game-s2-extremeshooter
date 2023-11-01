@@ -80,7 +80,9 @@ class Personaje
 	const property armamento
 	var property jugador
 	
-	method image()= direccion.nombre() + estado.nombre() + ".png"
+	method nombre()
+	
+	method image()= self.nombre() + direccion.nombre() + estado.nombre() + ".png"
 	
 	method avanzar()
 	{
@@ -135,16 +137,15 @@ class Personaje
 
 class PoolYui inherits Personaje(armamento = armamentoYui)
 {
-	override method image() = "elr_" + super()
-
+	override method nombre() = "temp_"
 }
 
 class Zipmata inherits Personaje(armamento = armamentoZipmata)
 {
-	override method image() = "char_" + super()
+	override method nombre() = "elr_"
 }
 
 class EagleMan inherits Personaje(armamento = armamentoEagleMan)
 {
-	override method image() = "eag_" + super()
+	override method nombre() = "eag_"
 }

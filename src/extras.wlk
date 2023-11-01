@@ -37,11 +37,13 @@ object derecha
 {
 	method nombre() = "der"
 	method comportamientoDireccional(disparo){disparo.comportamientoDerecha()}
+	method repelerADireccionOpuesta(personaje){personaje.retroceder()}
 }
 object izquierda
 {
 	method nombre() = "izq"
 	method comportamientoDireccional(disparo){disparo.comportamientoIzquierda()}
+	method repelerADireccionOpuesta(personaje){personaje.avanzar()}
 }
 
 object reposo

@@ -130,7 +130,7 @@ class DisparoDiagonalInferior inherits DisparoDiagonal
 //Armamentos
 class Armamento
 {
-	method image(_chara) = 	"_spell_"+_chara.direccion().nombre()+".png"
+	method image(_chara) = 	_chara.nombre() + "spell_" + _chara.direccion().nombre() + ".png"
 	method dispararProyectil(_chara,proyectil)
 	{
 		proyectil.colocarProyectil(_chara)
@@ -155,7 +155,6 @@ object armamentoZipmata inherits Armamento
 
 object armamentoYui inherits Armamento
 {
-	override method image(_chara) = "elr" + super(_chara)
 	method dispararProyectil1(_chara)
 	{
 		const proyectil = new Disparo(position = _chara.position(),imagen=self.image(_chara))
@@ -169,7 +168,6 @@ object armamentoYui inherits Armamento
 }
 object armamentoEagleMan inherits Armamento
 {
-	override method image(_chara) = "eag" + super(_chara)
 	method dispararProyectil1(_chara)
 	{
 		const proyectil = new Disparo(position = _chara.position(),imagen=self.image(_chara))
