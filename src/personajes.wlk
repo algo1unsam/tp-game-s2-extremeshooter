@@ -39,8 +39,8 @@ object jugador1 inherits Jugador(personaje = null){
 	override method direccionInicial() = derecha
 	override method controles()
 	{
-		keyboard.a().onPressDo({personaje.retroceder()})
-		keyboard.d().onPressDo({personaje.avanzar()})
+		keyboard.a().onPressDo({personaje.moverIzquierda()})
+		keyboard.d().onPressDo({personaje.moverDerecha()})
 		keyboard.w().onPressDo({personaje.volar()})
 		keyboard.j().onPressDo({personaje.disparo1()})
 		keyboard.k().onPressDo({personaje.disparo2()})
@@ -57,8 +57,8 @@ object jugador2 inherits Jugador(personaje = null){
 	override method direccionInicial() = izquierda
 	override method controles()
 	{
-		keyboard.left().onPressDo({personaje.retroceder()})
-		keyboard.right().onPressDo({personaje.avanzar()})
+		keyboard.left().onPressDo({personaje.moverIzquierda()})
+		keyboard.right().onPressDo({personaje.moverDerecha()})
 		keyboard.up().onPressDo({personaje.volar()})
 		game.onTick(500,"caida",{=> personaje.caer()})
 		keyboard.z().onPressDo({personaje.disparo1()})
@@ -84,12 +84,12 @@ class Personaje
 	
 	method image()= self.nombre() + direccion.nombre() + estado.nombre() + ".png"
 	
-	method avanzar()
+	method moverDerecha()
 	{
 		position = self.position().right(1)
 		direccion = derecha
 	}
-	method retroceder()
+	method moverIzquierda()
 	{
 		position = self.position().left(1)
 		direccion = izquierda
@@ -97,8 +97,8 @@ class Personaje
 	
 	method interaccionCon(otroJugador)
 	{
-		otroJugador.personaje().avanzar()
-		self.retroceder()
+		otroJugador.personaje().moverDerecha()
+		self.moverIzquierda()
 	}
 	
 	//Metodos para volar y caer	
@@ -106,7 +106,7 @@ class Personaje
 	method volar()
 	{
 		if(not(jugador.sinEnergia())){
-		jugador.gastarEnergia(1)
+		jugador.gastarEnergia(5)
 		position = self.position().up(2)}
 	}
 	method caer() //Cuando dejé de volar
@@ -121,14 +121,14 @@ class Personaje
 	{
 		if(not(jugador.sinEnergia())){
 		estado = ataque
-		jugador.gastarEnergia(5)
+		jugador.gastarEnergia(10)
 		armamento.dispararProyectil1(self)}
 	}
 	method disparo2()
 	{
 		if(not(jugador.sinEnergia())){
 		estado = ataque
-		jugador.gastarEnergia(5)
+		jugador.gastarEnergia(10)
 		armamento.dispararProyectil2(self)}
 	}
 	

@@ -38,7 +38,7 @@ class Disparo
 		position = self.position().right(1)
 	}
 	
-	//Detiene el movimiento de los proyectiles, se usa cuando colisiona con los personajes
+	//Detiene el movimiento de los proyectiles
 	method detenerMovimiento()
 	{
 		game.removeTickEvent(etiquetaTickMovement)
@@ -99,6 +99,7 @@ class DisparoVertical inherits Disparo
 
 class DisparoDiagonal inherits DisparoVertical
 {
+	override method danio() = 50
 	override method comportamientoDerecha()
 	{
 		game.onTick(100,etiquetaTickMovement,{=> self.moverDer() self.moverArriba()})

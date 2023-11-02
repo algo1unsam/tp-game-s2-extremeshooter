@@ -11,16 +11,23 @@ class Fondo{
 	{
 		game.sound(sonidoDeFondo).shouldLoop(true)
 		game.sound(sonidoDeFondo).volume(0.5)
-		game.schedule(50, {game.sound(sonidoDeFondo).play()})
+		game.schedule(150, {game.sound(sonidoDeFondo).play()})
 	}
 }
 
 class Marco{
 	var property position
 	var property image
-	var property movimiento = true
+	var movimiento = true
 	var x1
 	var x2
+	
+	method movimiento() = movimiento
+	
+	method liberarMovimiento()
+	{
+		movimiento = true
+	}
 	
 	method bloquearMovimiento(){
 		movimiento = false
@@ -64,13 +71,12 @@ object instrucciones{
 }
 
 object seleccionEscenarios{
-	const property bosque 	= new Escenario(escenario = escenarioUno, position = game.at(2,3), image = "bosqueSmall.png", sonidoDeFondo = "track1.mp3" )
-	const property desierto = new Escenario(escenario = escenarioDos, position = game.at(6,3), image = "desiertoSmall.png", sonidoDeFondo = "track2.mp3")
-	const property castillo = new Escenario(escenario = escenarioTres, position = game.at(10,3), image = "castilloSmall.png", sonidoDeFondo = "track3.mp3")
-	const property futuro 	= new Escenario(escenario = escenarioCuatro, position = game.at(14,3), image = "futureSmall.png", sonidoDeFondo = "track4.mp3")
-	const property marco3   = new Marco(position = game.at(2,3), image = "marco3.png", x1 = 2, x2 = 16)
-	
 	var property cualFondo
+	const property marco3 = new Marco(position = game.at(2,3), image = "marco3.png", x1 = 2, x2 = 16)
+	method bosque()		  = new Escenario(escenario = new NivelUno(), position = game.at(2,3), image = "bosqueSmall.png", sonidoDeFondo = "track1.mp3" )
+	method desierto()	  = new Escenario(escenario = new NivelDos(), position = game.at(6,3), image = "desiertoSmall.png", sonidoDeFondo = "track2.mp3")
+	method castillo()	  = new Escenario(escenario = new NivelTres(), position = game.at(10,3), image = "castilloSmall.png", sonidoDeFondo = "track3.mp3")
+	method futuro() 	  = new Escenario(escenario = new NivelCuatro(), position = game.at(14,3), image = "futureSmall.png", sonidoDeFondo = "track4.mp3")
 	
 	method iniciar(){
 		game.clear()
@@ -80,16 +86,11 @@ object seleccionEscenarios{
 	}
 	
 	method agregarEscenarios(){
-		game.addVisual(bosque)
-		game.addVisual(desierto)
-		game.addVisual(castillo)
-		game.addVisual(futuro)
+		game.addVisual(self.bosque())
+		game.addVisual(self.desierto())
+		game.addVisual(self.castillo())
+		game.addVisual(self.futuro())
 		game.addVisual(marco3)//y agregamos marco ya que estamos
-		game.hideAttributes(bosque)
-		game.hideAttributes(desierto)
-		game.hideAttributes(castillo)
-		game.hideAttributes(futuro)
-		game.hideAttributes(marco3)
 	}
 	
 	method agregarTeclas(){
@@ -173,13 +174,11 @@ object colisiones
 {
 	method validar()
 	{
-		game.onCollideDo(jugador1.personaje(),{objeto => objeto.interaccionCon(jugador1)})
-		game.onCollideDo(jugador2.personaje(),{objeto => objeto.interaccionCon(jugador2)})
-		//agregar collides de los poderes
-		game.onTick(100,"validarEnergia",{=>validarEnergia.maxEnergia(jugador1)})
-		game.onTick(100,"validarEnergia",{=>validarEnergia.maxEnergia(jugador2)})
-		game.onTick(100,"validarEnergia",{=>validarEnergia.minEnergia(jugador1)})
-		game.onTick(100,"validarEnergia",{=>validarEnergia.minEnergia(jugador2)})
+		const jugadores = [jugador1,jugador2]
+		jugadores.forEach{jugador => 
+			game.onCollideDo(jugador.personaje(),{objeto => objeto.interaccionCon(jugador)})
+			game.onTick(100,"validarEnergia",{=>reguladorDeEnergia.validarEnergia(jugador)})
+		}
 		game.onTick(100,"validarMuerte",{=>final.validarVida() final.validarVida2()})
 	}
 }
@@ -189,14 +188,10 @@ object visualesGeneral
 {
 	method agregar()
 	{
-		game.addVisual(jugador1.personaje())
-		game.addVisual(jugador2.personaje())
-		game.addVisual(vida1)
-		game.addVisual(vida2)
-		game.addVisual(energia1)
-		game.addVisual(energia2)
-		game.addVisual(energia1Png)
-		game.addVisual(energia2Png)
+		const visuales = [jugador1.personaje(),jugador2.personaje(),vida1,vida2,energia1,energia2,energia1Png,energia2Png]
+		visuales.forEach{ visual=>
+			game.addVisual(visual)
+		}
 		self.agregarPociones()
 	}
 	method agregarPociones()
@@ -264,33 +259,40 @@ object final
 }
 	method iniciar(){
 		self.reiniciar()
-		keyboard.enter().onPressDo{game.stop() game.start()}
+		keyboard.enter().onPressDo{portada.iniciar()}
 	}
 	method reiniciar(){
-		seleccionPersonajes.p1().position(game.at(5,4))
-		seleccionPersonajes.p2().position(game.at(7,4))
-		seleccionPersonajes.p3().position(game.at(9,4))
+		seleccionPersonajes.p1(baseDeDatos.bp1())
+		seleccionPersonajes.p2(baseDeDatos.bp2())
+		seleccionPersonajes.p3(baseDeDatos.bp3())
+
+
+		seleccionPersonajes.marco1(baseDeDatos.bmarco1())
+		seleccionPersonajes.marco2(baseDeDatos.bmarco2())
 		
+		seleccionEscenarios.marco3().liberarMovimiento()
+		seleccionPersonajes.marco1().liberarMovimiento()
+		seleccionPersonajes.marco2().liberarMovimiento()
+
+		seleccionPersonajes.jugador1Ok(baseDeDatos.bjugadorOk())
+		seleccionPersonajes.jugador2Ok(baseDeDatos.bjugadorOk())
 		
-	//	seleccionPersonajes.marco1(baseDeDatos.bmarco1())
-	//	seleccionPersonajes.marco2(baseDeDatos.bmarco2())
-		
-		//seleccionPersonajes.jugador1Ok(baseDeDatos.bjugador1Ok())
-	//	seleccionPersonajes.jugador2Ok(baseDeDatos.bjugador2Ok())
 		jugador1.vidas(baseDeDatos.bvida())
 		jugador2.vidas(baseDeDatos.bvida())
+		jugador1.energia(baseDeDatos.benergia())
+		jugador2.energia(baseDeDatos.benergia())
 	}
 }
 object  baseDeDatos{
-		const property bp1 = new PoolYui(position=game.at(5,4),jugador=null)
-		const property bp2 = new Zipmata(position=game.at(7,4),jugador=null)
-		const property bp3 = new EagleMan(position=game.at(9,4),jugador=null)
+		method bp1() = new PoolYui(position=game.at(5,4),jugador=null)
+		method bp2() = new Zipmata(position=game.at(7,4),jugador=null)
+		method bp3() = new EagleMan(position=game.at(9,4),jugador=null)
+
+		method bmarco1() = new Marco(position = game.at(5,4), image = "marco1.png", x1 = 5, x2 = 10)
+		method bmarco2() = new Marco(position = game.at(7,4), image = "marco2.png", x1 = 5, x2 = 10)
 		
-		const property bmarco1 = new Marco(position = game.at(5,4), image = "marco1.png", x1 = 5, x2 = 10)
-		const property bmarco2 = new Marco(position = game.at(7,4), image = "marco2.png", x1 = 5, x2 = 10)
+		method bjugadorOk() = false
 		
-		const property bjugador1Ok = false
-		const property bjugador2Ok = false
-		
-		const property bvida = 100
+		method bvida() = 100
+		method benergia()= 100
 	}

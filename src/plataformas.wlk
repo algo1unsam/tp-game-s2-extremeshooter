@@ -23,9 +23,16 @@ class Pared inherits Plataforma{
 	}
 }
 
+class Techo inherits Pared
+{
+	override method repeler(personaje){
+		personaje.position(personaje.position().down(1))
+	}
+}
+
 class Nivel{
 	
-	var property plataformas = []
+	const plataformas = []
 	
 	method crearPlataforma(inicio,fin,altura){
 		(inicio..fin).forEach({numero => plataformas.add(new Plataforma(position=game.at(numero,altura)))})
@@ -35,23 +42,25 @@ class Nivel{
 		(inicio..fin).forEach({numero => plataformas.add(new Pared(position=game.at(posicionEnX,numero)))})
 	}
 	
+	method crearTecho(){
+		(0..game.width()).forEach({numero => plataformas.add(new Techo(position=game.at(numero,game.height())))})
+	}
 	method nuevoSuelo(){
 		plataformas.forEach({p => game.addVisual(p)})			
 	}
 	method limitesInvisibles(){
+		self.crearTecho()
 		self.crearPared(0,game.height(),-1)
 		self.crearPared(0,game.height(),game.width())
 		}
 }
 
 //Nivel 1
-object escenarioUno inherits Nivel
+class NivelUno inherits Nivel
 {
 	method creoPlataformas()
 	{
 		self.limitesInvisibles()
-		self.crearPared(0,game.height(),-1)
-		self.crearPared(0,game.height(),game.width())
 		self.crearPlataforma(0,game.width(),0)
 		self.crearPlataforma(game.center().x()-2,game.center().x()+2,5)
 		self.nuevoSuelo()
@@ -59,7 +68,7 @@ object escenarioUno inherits Nivel
 }
 
 //Nivel 2
-object escenarioDos inherits Nivel {
+class NivelDos inherits Nivel {
 	method creoPlataformas()
 	{
 		self.limitesInvisibles()
@@ -71,7 +80,7 @@ object escenarioDos inherits Nivel {
 }
 
 //Nivel 3
-object escenarioTres inherits Nivel {
+class NivelTres inherits Nivel {
 	method creoPlataformas()
 	{
 		self.limitesInvisibles()
@@ -79,13 +88,12 @@ object escenarioTres inherits Nivel {
 		self.crearPlataforma(game.center().x()-4,game.center().x()-2,7)
 		self.crearPlataforma(game.center().x()+4,game.center().x()+2,7)
 		self.crearPlataforma(game.center().x()-2,game.center().x()+2,2)
-		self.crearPlataforma(game.center().x()+2,game.center().x()+2,2)
 		self.nuevoSuelo()
 	}
 }
 
 //Nivel 4
-object escenarioCuatro inherits Nivel {
+class NivelCuatro inherits Nivel {
 	method creoPlataformas()
 	{
 		self.limitesInvisibles()

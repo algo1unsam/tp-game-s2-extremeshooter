@@ -37,13 +37,13 @@ object derecha
 {
 	method nombre() = "der"
 	method comportamientoDireccional(disparo){disparo.comportamientoDerecha()}
-	method repelerADireccionOpuesta(personaje){personaje.retroceder()}
+	method repelerADireccionOpuesta(personaje){personaje.moverIzquierda()}
 }
 object izquierda
 {
 	method nombre() = "izq"
 	method comportamientoDireccional(disparo){disparo.comportamientoIzquierda()}
-	method repelerADireccionOpuesta(personaje){personaje.avanzar()}
+	method repelerADireccionOpuesta(personaje){personaje.moverDerecha()}
 }
 
 object reposo
@@ -88,9 +88,9 @@ class PocionEnergia
 	}
 	
 }
-object validarEnergia
+object reguladorDeEnergia
 {
-	var property check = 0
+	var check = 0
 	method maxEnergia(jugador)
 	{
 		check = jugador.energia()
@@ -104,10 +104,15 @@ object validarEnergia
 		if(check < 0){
 			jugador.energia(100)
 		}
-	}	
+	}
+	method validarEnergia(jugador)
+	{
+		self.minEnergia(jugador)
+		self.maxEnergia(jugador)
+	}
 }
 class EnergiaPng{
-	const position 
+	const position
 	method position()= position.position().left(1)
 	method image()="energiaPng.png"
 	method interaccionCon(unJugador){}
@@ -117,6 +122,5 @@ object energia1Png inherits EnergiaPng(position = energia1){}
 object energia2Png inherits EnergiaPng(position = energia2){}
 	
 //Cosas faltantes:
-//	limites visuales
 //	sonidos faltantes
 //	cambiar skins de personajes y disparos
