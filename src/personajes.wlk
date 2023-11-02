@@ -42,8 +42,8 @@ object jugador1 inherits Jugador(personaje = null){
 		keyboard.a().onPressDo({personaje.moverIzquierda()})
 		keyboard.d().onPressDo({personaje.moverDerecha()})
 		keyboard.w().onPressDo({personaje.volar()})
-		keyboard.j().onPressDo({personaje.disparo1()})
-		keyboard.k().onPressDo({personaje.disparo2()})
+		keyboard.z().onPressDo({personaje.disparo1()})
+		keyboard.x().onPressDo({personaje.disparo2()})
 		game.onTick(500,"caida",{=> personaje.caer()})
 	}
 	
@@ -61,8 +61,8 @@ object jugador2 inherits Jugador(personaje = null){
 		keyboard.right().onPressDo({personaje.moverDerecha()})
 		keyboard.up().onPressDo({personaje.volar()})
 		game.onTick(500,"caida",{=> personaje.caer()})
-		keyboard.z().onPressDo({personaje.disparo1()})
-		keyboard.x().onPressDo({personaje.disparo2()})
+		keyboard.j().onPressDo({personaje.disparo1()})
+		keyboard.k().onPressDo({personaje.disparo2()})
 	}
 	
 	override method asignarPersonaje() {
