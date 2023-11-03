@@ -4,6 +4,7 @@ class Plataforma {
 	const property image = "plataforma.png"
 	method subir(personaje)
 	{
+		personaje.estaEnElSuelo()
 		personaje.position(personaje.position().up(1))
 	}
 	method interaccionCon(jugador)

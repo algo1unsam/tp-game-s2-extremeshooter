@@ -28,6 +28,12 @@ class Jugador
 		energia -= gasto
 	}
 	method sinEnergia() = energia <= 0
+	
+	method validarEnergia(){
+		game.errorReporter(self.personaje())
+		if (self.sinEnergia()) {throw new Exception(message="Sin Energia")}
+	}
+	
 	method recargaEnergia(pocion) 
 	{
 		energia += pocion
@@ -76,6 +82,7 @@ class Personaje
 {
 	var property direccion = derecha //La orientacion a donde el personaje esta apuntando. Puede ser izquierda (izq) o derecha (der)
 	var property estado = reposo
+	var property estadoVertical = suelo
 	var property position = game.origin()
 	const property armamento
 	var property jugador
@@ -101,13 +108,20 @@ class Personaje
 		self.moverIzquierda()
 	}
 	
+	method gastarEnergia(gastoEnergetico){
+		jugador.validarEnergia()
+		jugador.gastarEnergia(gastoEnergetico)
+	}
+	
 	//Metodos para volar y caer	
-	method enElSuelo()= self.position().y()==1
+	method enElSuelo() = estadoVertical == suelo
+	
+	method estaEnElSuelo() {estadoVertical = suelo}
+	
 	method volar()
 	{
-		if(not(jugador.sinEnergia())){
-		jugador.gastarEnergia(5)
-		position = self.position().up(2)}
+		self.gastarEnergia(10)
+		position = self.position().up(2)
 	}
 	method caer() //Cuando dejé de volar
 	{
@@ -115,21 +129,22 @@ class Personaje
 		 {
 		 	position = self.position().down(1)
 		 }
+		 estadoVertical = aire
 	}
-	
+	method disparo()
+	{
+		self.gastarEnergia(20)
+		estado = ataque
+	}
 	method disparo1()
 	{
-		if(not(jugador.sinEnergia())){
-		estado = ataque
-		jugador.gastarEnergia(10)
-		armamento.dispararProyectil1(self)}
+		self.disparo()
+		armamento.dispararProyectil1(self)
 	}
 	method disparo2()
 	{
-		if(not(jugador.sinEnergia())){
-		estado = ataque
-		jugador.gastarEnergia(10)
-		armamento.dispararProyectil2(self)}
+		self.disparo()
+		armamento.dispararProyectil2(self)
 	}
 	
 }
@@ -137,12 +152,12 @@ class Personaje
 
 class PoolYui inherits Personaje(armamento = armamentoYui)
 {
-	override method nombre() = "temp_"
+	override method nombre() = "elr_"
 }
 
 class Zipmata inherits Personaje(armamento = armamentoZipmata)
 {
-	override method nombre() = "elr_"
+	override method nombre() = "temp_"
 }
 
 class EagleMan inherits Personaje(armamento = armamentoEagleMan)

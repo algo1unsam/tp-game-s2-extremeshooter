@@ -16,8 +16,7 @@ object vida2 inherits Vida(jugador = jugador2) {
 }
 object color
 {
-	const property blanco 	= "FFFFFF"
-	const property noBlanco = "000000"
+	method blanco()	= "FFFFFF"
 }
 
 class Energia
@@ -50,6 +49,15 @@ object reposo
 {
 	method nombre()=""
 }
+
+object suelo{
+	
+}
+
+object aire{
+	
+}
+
 
 object ataque
 {

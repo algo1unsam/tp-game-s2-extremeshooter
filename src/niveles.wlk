@@ -237,24 +237,25 @@ object batalla
 }
 object final
 {
-	var finall
-	var property check = 0
+	var final
+	var check = 0
+	method finalizarBatalla(){
+		game.clear()
+		game.addVisual(final)
+		self.iniciar()
+	}
 	method validarVida() {
 		check = jugador1.vidas()
-		if (check == 0){
-			finall = new Fondo(image="final2.png")
-			game.clear()
-			game.addVisual(finall)
-			self.iniciar()
+		if (check <= 0){
+			final = new Fondo(image="final2.png")
+			self.finalizarBatalla()
 		}
 		}
   	 method validarVida2() {
 		check = jugador2.vidas()
-		if (check == 0){
-			finall = new Fondo(image="final1.png")
-			game.clear()
-			game.addVisual(finall)
-			self.iniciar()
+		if (check <= 0){
+			final = new Fondo(image="final1.png")
+			self.finalizarBatalla()
 		}
 }
 	method iniciar(){

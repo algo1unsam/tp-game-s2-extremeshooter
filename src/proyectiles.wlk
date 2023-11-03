@@ -69,6 +69,8 @@ class Disparo
 
 class DisparoVertical inherits Disparo
 {
+	override method danio() = 30
+
 	method moverArriba()
 	{
 		position = self.position().up(1)
@@ -85,21 +87,15 @@ class DisparoVertical inherits Disparo
 	{
 		game.onTick(100,etiquetaTickMovement,{=> self.moverAbajo()})
 	}
-	method comportamientoVertical(_chara)
-	{
-		if(_chara.enElSuelo())	{self.comportamientoArriba()}
-		else	{self.comportamientoAbajo()}
-	}
 	override method evaluarComportamiento(_chara)
 	{
-		self.comportamientoVertical(_chara)
+		_chara.estadoVertical().comportamientoDireccional(self)
 	}
 	
 }
 
 class DisparoDiagonal inherits DisparoVertical
 {
-	override method danio() = 50
 	override method comportamientoDerecha()
 	{
 		game.onTick(100,etiquetaTickMovement,{=> self.moverDer() self.moverArriba()})
@@ -138,45 +134,36 @@ class Armamento
 		proyectil.automaticSelfDestruction()
 		game.schedule(100,{=>_chara.estado(reposo)})
 	}
-}
-
-object armamentoZipmata inherits Armamento
-{
-	method dispararProyectil1(_chara)
-	{
-		const proyectil = new DisparoDiagonal(position = _chara.position(),imagen=self.image(_chara))
-		self.dispararProyectil(_chara,proyectil)
-	}
-	method dispararProyectil2(_chara)
-	{
-		const proyectil = new DisparoDiagonalInferior(position = _chara.position(),imagen=self.image(_chara))
-		self.dispararProyectil(_chara,proyectil)
-	}
-}
-
-object armamentoYui inherits Armamento
-{
+	
 	method dispararProyectil1(_chara)
 	{
 		const proyectil = new Disparo(position = _chara.position(),imagen=self.image(_chara))
 		self.dispararProyectil(_chara,proyectil)
 	}
+}
+
+object armamentoZipmata inherits Armamento
+{
 	method dispararProyectil2(_chara)
 	{
 		const proyectil = new DisparoVertical(position = _chara.position(),imagen=self.image(_chara))
 		self.dispararProyectil(_chara,proyectil)
 	}
 }
-object armamentoEagleMan inherits Armamento
+
+object armamentoYui inherits Armamento
 {
-	method dispararProyectil1(_chara)
-	{
-		const proyectil = new Disparo(position = _chara.position(),imagen=self.image(_chara))
-		self.dispararProyectil(_chara,proyectil)
-	}
 	method dispararProyectil2(_chara)
 	{
 		const proyectil = new DisparoDiagonal(position = _chara.position(),imagen=self.image(_chara))
+		self.dispararProyectil(_chara,proyectil)
+	}
+}
+object armamentoEagleMan inherits Armamento
+{
+	method dispararProyectil2(_chara)
+	{
+		const proyectil = new DisparoDiagonalInferior(position = _chara.position(),imagen=self.image(_chara))
 		self.dispararProyectil(_chara,proyectil)
 	}
 }
