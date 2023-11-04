@@ -135,31 +135,33 @@ object seleccionPersonajes{
 		game.addVisual(marco1)//y agregamos marcos ya que estamos
 		game.addVisual(marco2)
 	}
-	
+
+	method escogerPersonaje(_marco){
+		_marco.bloquearMovimiento()
+		return game.uniqueCollider(_marco)
+	}
+
 	method agregarTeclas(){
 		keyboard.enter().onPressDo{self.iniciar()}
 		keyboard.a().onPressDo{if (marco1.movimiento()){marco1.irALosLados(marco1.position().left(2))}	}
 		keyboard.d().onPressDo{if (marco1.movimiento()) {marco1.irALosLados(marco1.position().right(2))}}
 		keyboard.e().onPressDo{if (marco1.movimiento()){
-			//Meter esto en un metodo
-								if (not (marco1.position()==marco2.position())) {
-									marco1.bloquearMovimiento()
-									quienJugador1 = game.uniqueCollider(marco1)
-									jugador1Ok = true
-									if (self.seleccionPersonajesOk()){batalla.iniciar()}
-									}}
+					if (not (marco1.position()==marco2.position())) {
+						quienJugador1 = self.escogerPersonaje(marco1)
+						jugador1Ok = true
+						if (self.seleccionPersonajesOk()){batalla.iniciar()}
+					}}
 			
 		}
 		
 		keyboard.left().onPressDo{if (marco2.movimiento()) {marco2.irALosLados(marco2.position().left(2))}}
 		keyboard.right().onPressDo{if (marco2.movimiento()) {marco2.irALosLados(marco2.position().right(2))}}
 		keyboard.l().onPressDo{if (marco2.movimiento()){
-								if (not (marco1.position()==marco2.position())) {
-								marco2.bloquearMovimiento()
-								quienJugador2 = game.uniqueCollider(marco2)
-								jugador2Ok = true
-								if (self.seleccionPersonajesOk()){batalla.iniciar()}
-								}}
+					if (not (marco1.position()==marco2.position())) {
+						quienJugador2 = self.escogerPersonaje(marco1)
+						jugador2Ok = true
+						if (self.seleccionPersonajesOk()){batalla.iniciar()}
+					}}
 			
 		}
 	}
