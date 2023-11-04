@@ -51,11 +51,11 @@ object reposo
 }
 
 object suelo{
-	
+	method comportamientoDireccional(disparo){disparo.comportamientoArriba()}
 }
 
 object aire{
-	
+	method comportamientoDireccional(disparo){disparo.comportamientoAbajo()}
 }
 
 
