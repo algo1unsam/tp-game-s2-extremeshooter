@@ -158,7 +158,7 @@ object seleccionPersonajes{
 		keyboard.right().onPressDo{if (marco2.movimiento()) {marco2.irALosLados(marco2.position().right(2))}}
 		keyboard.l().onPressDo{if (marco2.movimiento()){
 					if (not (marco1.position()==marco2.position())) {
-						quienJugador2 = self.escogerPersonaje(marco1)
+						quienJugador2 = self.escogerPersonaje(marco2)
 						jugador2Ok = true
 						if (self.seleccionPersonajesOk()){batalla.iniciar()}
 					}}
