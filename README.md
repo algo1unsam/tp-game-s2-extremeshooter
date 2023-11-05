@@ -31,19 +31,19 @@ Te recomendamos conectar dos teclados a la PC para una mejor experiencia de jueg
 3. A jugar!
 4. El primer jugador en terminar con el total de las vidas del oponente será el ganador. Recordá recoger las pociones de energía para no perder tus habilidades!
 
-## Controles
-Jugador 1
-A => moverse para la izquierda
-D => moverse para la derecha
-W => volar
-J => Disparo primario
-K => Disparo secundario
-Jugador 2
-left => moverse para la izquierda
-right => moverse para la derecha
-up => volar
-Z => Disparo primario
-X => Disparo secundario
+### Controles
+- Jugador 1
+  - A     => moverse para la izquierda
+  - D     => moverse para la derecha
+  - W     => volar
+  - J     => Disparo primario
+  - K     => Disparo secundario
+- Jugador 2
+  - left  => moverse para la izquierda
+  - right => moverse para la derecha
+  - up    => volar
+  - Z     => Disparo primario
+  - X     => Disparo secundario
 
 ## Otros
 
