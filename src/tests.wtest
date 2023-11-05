@@ -1,6 +1,43 @@
-//no test yet
-test "testX" {
+import wollok.game.*
+import niveles.*
+import plataformas.*
+import personajes.*
 
-	assert.that(true)
+	const marco3 = new Marco(position = game.at(2,3), image = "marco3.png", x1 = 2, x2 = 16)
+	const bosque = new Escenario(escenario = new NivelUno(), position = game.at(2,3), image = "bosqueSmall.png", sonidoDeFondo = "track1.mp3" )
+	
+	const poolYui = new PoolYui(position=game.at(5,4),jugador=null)
+	const zipMata = new Zipmata(position=game.at(7,4),jugador=null)
+	
+	const marco1 = new Marco(position = game.at(5,4), image = "marco1.png", x1 = 5, x2 = 10)
+	const marco2 = new Marco(position = game.at(7,4), image = "marco2.png", x1 = 5, x2 = 10)
+	
+describe "Modulo 1. Selección de background y personajes" {
 
+	test "Selección de escenario BOSQUE" {
+	
+		game.addVisual(bosque)
+		game.addVisual(marco3)
+		assert.equals(game.uniqueCollider(marco3),bosque)
+	
+	}
+	
+	test "Selección de personajes" {
+		
+		game.addVisual(poolYui)
+		game.addVisual(zipMata)
+		game.addVisual(marco1)
+		game.addVisual(marco2)
+		
+		seleccionPersonajes.escogerPersonaje(marco1)
+		seleccionPersonajes.escogerPersonaje(marco2)
+		
+		assert.equals(seleccionPersonajes.escogerPersonaje(marco1),poolYui)
+		assert.equals(seleccionPersonajes.escogerPersonaje(marco2),zipMata)
+		
+		
+	}
+	
 }
+
+/* describe "" {} */
