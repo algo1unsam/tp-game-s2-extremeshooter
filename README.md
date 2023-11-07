@@ -10,7 +10,7 @@
 - Camila Piraneo (@Ariashy)
 
 ## Overview
-Un juego de peleas basado en proyectiles. Los personajes no se pueden golpear entre ellos pero si se pueden disparar, cada personaje cuenta con 2 tipos de disparos, pueden moverse de izquierda a derecha y también volar, además de poder subirse a plataformaas.
+Un juego de peleas basado en proyectiles. Los personajes no se pueden golpear entre ellos pero si se pueden disparar, cada personaje cuenta con 2 tipos de disparos, pueden moverse de izquierda a derecha y también volar, además de poder subirse a plataformas.
 
 ## Capturas
 
