@@ -102,11 +102,7 @@ class Personaje
 		direccion = izquierda
 	}
 	
-	method interaccionCon(otroJugador)
-	{
-		otroJugador.personaje().moverDerecha()
-		self.moverIzquierda()
-	}
+	method interaccionCon(otroJugador){}
 	
 	method gastarEnergia(gastoEnergetico){
 		jugador.validarEnergia()
