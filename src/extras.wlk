@@ -110,7 +110,7 @@ object reguladorDeEnergia
 	{
 		check = jugador.energia()
 		if(check < 0){
-			jugador.energia(100)
+			jugador.energia(0)
 		}
 	}
 	method validarEnergia(jugador)
